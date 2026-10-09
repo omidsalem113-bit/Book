@@ -1,0 +1,7 @@
+{
+  "id": "da-vinci-code",
+  "rating": 3.5,
+  "cover": "",
+  "hidden": [],
+  "supabase": { "url": "YOUR_SUPABASE_URL", "key": "YOUR_SUPABASE_PUBLISHABLE_KEY" }
+}

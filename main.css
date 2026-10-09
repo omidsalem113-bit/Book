@@ -1,0 +1,69 @@
+/* Theme: change these tokens to re-skin the site for another book */
+:root{--bg:#0c0f1a;--bg2:#151b2e;--ink:#ece3cf;--mute:#a29d8b;--gold:#c8a762;--seal:#c4574d;--line:rgba(236,227,207,.2);
+--fh:'Cormorant Garamond',serif;--fb:'Newsreader',Georgia,serif;--s1:.5rem;--s2:1rem;--s3:1.75rem;--s4:3rem}
+:lang(fa){--fh:'Markazi Text',serif;--fb:'Vazirmatn',system-ui,sans-serif}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:radial-gradient(120% 60% at 80% 0,#1c2440 0,var(--bg) 60%) fixed;color:var(--ink);font:400 1.06rem/1.75 var(--fb);overflow-x:hidden}
+:lang(fa) body{line-height:2.05}
+h1,h2,h3{font-family:var(--fh);font-weight:700;line-height:1.1;margin:0}
+h2{font-size:clamp(2.2rem,9vw,3.4rem);margin-block:var(--s2) var(--s3)}
+h3{font-size:1.6rem;margin-block:var(--s3) var(--s1)}
+p{margin:0 0 var(--s2)}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.sr{position:absolute;inline-size:1px;block-size:1px;overflow:hidden;clip-path:inset(50%)}
+.btn{background:transparent;border:1px solid var(--gold);padding:.55rem 1.1rem;min-block-size:44px;border-radius:2px;transition:background .2s}
+.btn:hover{background:rgba(200,167,98,.15)}
+.btn.small{padding:.3rem .9rem;font-size:.95rem}
+#top{position:fixed;inset-block-start:0;inset-inline:0;display:flex;justify-content:flex-end;padding:calc(.6rem + env(safe-area-inset-top)) 1rem 0;z-index:5;pointer-events:none}
+#top button{pointer-events:auto;background:rgba(12,15,26,.6);backdrop-filter:blur(8px)}
+main{max-inline-size:40rem;margin-inline:auto;padding:5rem 1.25rem 8rem;outline:0}
+#dock{position:fixed;inset-inline:0;inset-block-end:0;display:flex;justify-content:space-between;gap:1rem;padding:.6rem 1rem calc(.6rem + env(safe-area-inset-bottom));background:rgba(12,15,26,.72);backdrop-filter:blur(12px);border-block-start:1px solid var(--line);z-index:5}
+#toc{position:fixed;inset-inline:1rem;inset-block-end:4.6rem;max-block-size:65vh;overflow:auto;background:var(--bg2);border:1px solid var(--line);padding:var(--s2);z-index:6}
+#toc[hidden]{display:none}
+ul{list-style:none;margin:0;padding:0}
+.toc-list a,#toc a{display:block;padding:.7rem 0;border-block-end:1px solid var(--line);color:var(--ink);text-decoration:none;font-family:var(--fh);font-size:1.7rem;transition:color .2s,padding .2s}
+.toc-list a:hover,#toc a:hover,#toc a[aria-current]{color:var(--gold);padding-inline-start:.6rem}
+.home{position:relative;padding-block-start:var(--s3)}
+.home h1{font-size:clamp(3.4rem,19vw,7.5rem);margin-block:var(--s2) var(--s1)}
+.orig{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.5rem;color:var(--gold);margin:0 0 var(--s3)}
+.meta{color:var(--mute);margin:0;line-height:1.6}
+.home .tag{margin-block:var(--s3);max-inline-size:28rem;font-size:1.15rem}
+.home img{inline-size:min(60%,14rem);block-size:auto;margin-block:var(--s2);border:1px solid var(--line)}
+.spiral{position:absolute;inset-block-start:-1rem;inset-inline-end:-35%;inline-size:120%;fill:none;stroke:var(--gold);stroke-width:.25;opacity:.2;pointer-events:none;z-index:-1}
+.rate{display:flex;align-items:center;gap:.8rem;margin-block-end:var(--s3)}
+.stars{direction:ltr;font-size:1.5rem;letter-spacing:.12em;background:linear-gradient(90deg,var(--gold) calc(var(--r)/5*100%),rgba(236,227,207,.22) 0);-webkit-background-clip:text;background-clip:text;color:transparent}
+.back{background:none;border:0;color:var(--mute);padding:.3rem 0;min-block-size:44px}
+.notice{border:1px dashed var(--line);padding:var(--s2);color:var(--mute);font-size:.95rem}
+.mine{border-inline-start:3px solid var(--gold);background:rgba(200,167,98,.07);padding:var(--s2) var(--s3)}
+.lbl{font-family:var(--fh);font-size:1.3rem;color:var(--gold);display:block;margin-block-end:var(--s1)}
+.hl{cursor:pointer;padding:.2rem .5rem;margin-inline:-.5rem;transition:background .3s}
+.hl.on{background:rgba(200,167,98,.2);box-shadow:inset 3px 0 0 var(--gold)}
+.q{margin:var(--s4) 0;padding-inline-start:var(--s2);border-inline-start:2px solid var(--gold)}
+.q blockquote{margin:0 0 var(--s1);font-family:var(--fh);font-size:1.8rem;line-height:1.35}
+.q figcaption{color:var(--mute);font-size:.9rem}
+.q.flash{animation:fl 1.6s}
+@keyframes fl{from{background:rgba(200,167,98,.25)}}
+.act{display:flex;gap:.6rem;flex-wrap:wrap;margin-block:var(--s2)}
+.gate{border:1px dashed var(--seal);padding:var(--s3);text-align:center}
+.gate .btn{border-color:var(--seal)}
+.card{border-block-start:1px solid var(--line);padding-block:var(--s2)}
+.card b{font-family:var(--fh);font-size:1.5rem}
+.st{font-size:.9rem;border:1px solid currentColor;padding:.05rem .6rem;margin-inline-start:.5rem;white-space:nowrap}
+.st.todo{color:var(--seal)}.st.done{color:var(--gold)}
+input,textarea{inline-size:100%;background:transparent;border:1px solid var(--line);color:var(--ink);padding:.7rem;font:inherit;margin-block:.3rem var(--s2);border-radius:2px}
+label{display:block;font-size:.95rem;color:var(--mute)}
+.cmt{border-block-start:1px solid var(--line);padding-block:var(--s2)}
+.cmt small{color:var(--mute)}
+.cmt p{white-space:pre-wrap;overflow-wrap:anywhere}
+.err{color:var(--seal)}
+#intro{position:fixed;inset:0;z-index:20;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem;transition:opacity .6s}
+#intro.out{opacity:0;pointer-events:none}
+#intro .spiral{position:absolute;inset:0;margin:auto;inline-size:min(130vw,60rem);opacity:.8;stroke-dasharray:400;stroke-dashoffset:400;animation:draw 3s ease-out forwards;z-index:0}
+#intro h1{font-size:clamp(3rem,16vw,6rem);position:relative;opacity:0;animation:in 1.2s 1s forwards}
+#intro .btn{position:relative;margin-block-start:var(--s3);opacity:0;animation:in .8s 1.8s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes in{to{opacity:1}}
+@media(prefers-reduced-motion:reduce){#intro .spiral{animation:none;stroke-dashoffset:0}#intro h1,#intro .btn{animation:none;opacity:1}#intro{transition:none}html{scroll-behavior:auto}.q.flash{animation:none}}
+@media(min-width:48rem){body{font-size:1.15rem}main{padding-block-start:6rem}}
