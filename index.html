@@ -1,0 +1,241 @@
+```html
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>کتابنامه | Personal Book Journal</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        paper: {
+                            light: '#F5F1E8',
+                            cardLight: '#FFFDF8',
+                            dark: '#242522',
+                            cardDark: '#2D2E2B',
+                            textLight: '#292A27',
+                            textDark: '#E6E1D6',
+                            accentLight: '#8A7863',
+                            accentDark: '#C4B59D',
+                            borderLight: '#E3DEC3',
+                            borderDark: '#3E3F3B'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'Georgia', 'Vazirmatn', 'serif'],
+                        sans: ['Vazirmatn', 'Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts for Persian & English Editorial Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Vazirmatn', 'Georgia', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .editorial-title {
+            font-family: 'Playfair Display', 'Vazirmatn', serif;
+        }
+        /* Custom scrollbar for refined aesthetic */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(138, 120, 99, 0.3);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(138, 120, 99, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-paper-light dark:bg-paper-dark text-paper-textLight dark:text-paper-textDark min-h-screen flex flex-col antialiased selection:bg-paper-accentLight selection:text-white dark:selection:bg-paper-accentDark dark:selection:text-paper-dark">
+
+    <!-- TOP NAVIGATION BAR -->
+    <header class="sticky top-0 z-40 backdrop-blur-md bg-paper-light/80 dark:bg-paper-dark/80 border-b border-paper-borderLight/60 dark:border-paper-borderDark/60 transition-colors">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+            
+            <!-- Book Title & Brand Link -->
+            <a href="#home" onclick="navigateTo('home')" class="flex items-center gap-3 group focus:outline-none">
+                <div class="w-8 h-8 rounded border border-paper-accentLight/40 dark:border-paper-accentDark/40 flex items-center justify-center bg-paper-cardLight dark:bg-paper-cardDark text-paper-accentLight dark:text-paper-accentDark group-hover:border-paper-accentLight dark:group-hover:border-paper-accentDark transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                </div>
+                <span id="navBookTitle" class="editorial-title font-semibold text-lg tracking-tight truncate max-w-[180px] sm:max-w-xs">
+                    کتابنامه
+                </span>
+            </a>
+
+            <!-- Navigation Links (Desktop) -->
+            <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
+                <button onclick="navigateTo('notes')" class="nav-btn hover:text-paper-accentLight dark:hover:text-paper-accentDark transition-colors" data-i18n="nav_notes">یادداشت‌ها</button>
+                <button onclick="navigateTo('ideas')" class="nav-btn hover:text-paper-accentLight dark:hover:text-paper-accentDark transition-colors" data-i18n="nav_ideas">پرسش‌ها و ایده‌ها</button>
+                <button onclick="navigateTo('audio')" class="nav-btn hover:text-paper-accentLight dark:hover:text-paper-accentDark transition-colors" data-i18n="nav_audio">آرشیو صوتی</button>
+                <button onclick="navigateTo('quotes')" class="nav-btn hover:text-paper-accentLight dark:hover:text-paper-accentDark transition-colors" data-i18n="nav_quotes">نقل‌قول‌ها</button>
+            </nav>
+
+            <!-- Controls (Lang, Theme, Guide) -->
+            <div class="flex items-center gap-2">
+                <!-- Language Toggle -->
+                <button onclick="toggleLanguage()" id="langBtn" class="px-2.5 py-1 text-xs font-semibold rounded border border-paper-borderLight dark:border-paper-borderDark hover:bg-paper-cardLight dark:hover:bg-paper-cardDark transition-colors" title="Switch Language / تغییر زبان">
+                    EN
+                </button>
+
+                <!-- Theme Toggle -->
+                <button onclick="toggleTheme()" class="p-1.5 rounded border border-paper-borderLight dark:border-paper-borderDark hover:bg-paper-cardLight dark:hover:bg-paper-cardDark transition-colors text-paper-accentLight dark:text-paper-accentDark" title="Toggle Theme / تغییر پوسته">
+                    <svg id="themeIconSun" class="w-4 h-4 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    <svg id="themeIconMoon" class="w-4 h-4 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                </button>
+
+                <!-- Manager / Guide Modal Triggers -->
+                <button onclick="navigateTo('manager')" class="p-1.5 rounded border border-paper-borderLight dark:border-paper-borderDark hover:bg-paper-cardLight dark:hover:bg-paper-cardDark transition-colors text-paper-accentLight dark:text-paper-accentDark" title="Content Manager / مدیر محتوا">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                </button>
+                <button onclick="navigateTo('guide')" class="p-1.5 rounded border border-paper-borderLight dark:border-paper-borderDark hover:bg-paper-cardLight dark:hover:bg-paper-cardDark transition-colors text-paper-accentLight dark:text-paper-accentDark" title="GitHub Guide / راهنمای انتشار">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Subbar -->
+        <div class="md:hidden flex items-center justify-around border-t border-paper-borderLight/40 dark:border-paper-borderDark/40 py-2 px-2 text-xs font-medium bg-paper-light/95 dark:bg-paper-dark/95">
+            <button onclick="navigateTo('home')" class="hover:text-paper-accentLight dark:hover:text-paper-accentDark p-1" data-i18n="nav_home">خانه</button>
+            <button onclick="navigateTo('notes')" class="hover:text-paper-accentLight dark:hover:text-paper-accentDark p-1" data-i18n="nav_notes">یادداشت‌ها</button>
+            <button onclick="navigateTo('ideas')" class="hover:text-paper-accentLight dark:hover:text-paper-accentDark p-1" data-i18n="nav_ideas">ایده‌ها</button>
+            <button onclick="navigateTo('audio')" class="hover:text-paper-accentLight dark:hover:text-paper-accentDark p-1" data-i18n="nav_audio">صوتی</button>
+            <button onclick="navigateTo('quotes')" class="hover:text-paper-accentLight dark:hover:text-paper-accentDark p-1" data-i18n="nav_quotes">نقل‌قول</button>
+        </div>
+    </header>
+
+    <!-- GLOBAL NOTIFICATION TOAST -->
+    <div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 transform translate-y-20 opacity-0 transition-all duration-300 ease-out bg-paper-textLight dark:bg-paper-textDark text-paper-light dark:text-paper-dark px-4 py-2.5 rounded-lg shadow-lg text-xs font-medium flex items-center gap-2 pointer-events-none">
+        <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+        <span id="toastMsg">پیام سیستم</span>
+    </div>
+
+    <!-- MAIN ROUTER CONTAINER -->
+    <main class="flex-grow max-w-5xl w-full mx-auto px-4 sm:px-6 py-8">
+
+        <!-- 1. HOMEPAGE VIEW -->
+        <section id="view-home" class="page-view space-y-12">
+            <!-- Hero Frame & Artwork Section -->
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center bg-paper-cardLight dark:bg-paper-cardDark p-6 sm:p-10 rounded-2xl border border-paper-borderLight/80 dark:border-paper-borderDark/80 shadow-sm transition-all">
+                
+                <!-- Book Artwork Frame -->
+                <div class="md:col-span-5 flex justify-center">
+                    <div class="relative group max-w-[240px] w-full aspect-[2/3] rounded-lg overflow-hidden shadow-md border-4 border-paper-light dark:border-paper-dark bg-paper-light dark:bg-paper-dark transition-transform duration-300 hover:scale-[1.02]">
+                        <img id="homeCoverImg" src="" alt="Book Cover Artwork" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/400x600/8A7863/FFFDF8?text=Book+Artwork'">
+                        <div class="absolute inset-0 ring-1 ring-inset ring-black/10 dark:ring-white/10 rounded-lg pointer-events-none"></div>
+                    </div>
+                </div>
+
+                <!-- Book Metadata & Introduction -->
+                <div class="md:col-span-7 space-y-4 text-center md:text-start">
+                    <div class="inline-block px-3 py-1 rounded-full text-xs font-medium bg-paper-accentLight/10 dark:bg-paper-accentDark/10 text-paper-accentLight dark:text-paper-accentDark border border-paper-accentLight/20 dark:border-paper-accentDark/20">
+                        <span data-i18n="reading_journal">دفتر خوانش و تأملات</span>
+                    </div>
+                    <h1 id="homeBookTitle" class="editorial-title text-3xl sm:text-4xl font-bold tracking-tight text-paper-textLight dark:text-paper-textDark leading-tight">
+                        --
+                    </h1>
+                    <p id="homeBookAuthor" class="text-base sm:text-lg font-medium text-paper-accentLight dark:text-paper-accentDark">
+                        --
+                    </p>
+                    <div class="w-12 h-0.5 bg-paper-accentLight/30 dark:bg-paper-accentDark/30 mx-auto md:mx-0 my-2"></div>
+                    <p id="homeBookIntro" class="text-sm sm:text-base leading-relaxed text-paper-textLight/80 dark:text-paper-textDark/80 font-normal">
+                        --
+                    </p>
+                </div>
+            </div>
+
+            <!-- Navigation Cards Grid (4 Core Sections) -->
+            <div>
+                <h2 class="text-xs font-semibold uppercase tracking-wider text-paper-accentLight dark:text-paper-accentDark mb-4 px-1" data-i18n="explore_sections">
+                    بخش‌های اصلی کتابنامه
+                </h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- Card 1: Notes -->
+                    <div onclick="navigateTo('notes')" class="group cursor-pointer p-5 rounded-xl bg-paper-cardLight dark:bg-paper-cardDark border border-paper-borderLight dark:border-paper-borderDark hover:border-paper-accentLight dark:hover:border-paper-accentDark transition-all duration-200 hover:-translate-y-0.5">
+                        <div class="w-9 h-9 rounded-lg bg-paper-light dark:bg-paper-dark border border-paper-borderLight dark:border-paper-borderDark flex items-center justify-center text-paper-accentLight dark:text-paper-accentDark mb-3 group-hover:scale-110 transition-transform">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                        </div>
+                        <h3 class="font-bold text-base mb-1" data-i18n="card_notes_title">یادداشت‌های خوانش</h3>
+                        <p class="text-xs text-paper-textLight/70 dark:text-paper-textDark/70 leading-relaxed" data-i18n="card_notes_desc">تحلیل فصل‌ها، خلاصه‌ها و برداشت‌های شخصی از متن.</p>
+                    </div>
+
+                    <!-- Card 2: Ideas -->
+                    <div onclick="navigateTo('ideas')" class="group cursor-pointer p-5 rounded-xl bg-paper-cardLight dark:bg-paper-cardDark border border-paper-borderLight dark:border-paper-borderDark hover:border-paper-accentLight dark:hover:border-paper-accentDark transition-all duration-200 hover:-translate-y-0.5">
+                        <div class="w-9 h-9 rounded-lg bg-paper-light dark:bg-paper-dark border border-paper-borderLight dark:border-paper-borderDark flex items-center justify-center text-paper-accentLight dark:text-paper-accentDark mb-3 group-hover:scale-110 transition-transform">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+                        </div>
+                        <h3 class="font-bold text-base mb-1" data-i18n="card_ideas_title">پرسش‌ها و ایده‌ها</h3>
+                        <p class="text-xs text-paper-textLight/70 dark:text-paper-textDark/70 leading-relaxed" data-i18n="card_ideas_desc">سوالات پژوهشی، فرضیه‌ها و ایده‌های الهام‌گرفته.</p>
+                    </div>
+
+                    <!-- Card 3: Audio -->
+                    <div onclick="navigateTo('audio')" class="group cursor-pointer p-5 rounded-xl bg-paper-cardLight dark:bg-paper-cardDark border border-paper-borderLight dark:border-paper-borderDark hover:border-paper-accentLight dark:hover:border-paper-accentDark transition-all duration-200 hover:-translate-y-0.5">
+                        <div class="w-9 h-9 rounded-lg bg-paper-light dark:bg-paper-dark border border-paper-borderLight dark:border-paper-borderDark flex items-center justify-center text-paper-accentLight dark:text-paper-accentDark mb-3 group-hover:scale-110 transition-transform">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path></svg>
+                        </div>
+                        <h3 class="font-bold text-base mb-1" data-i18n="card_audio_title">آرشیو صوتی</h3>
+                        <p class="text-xs text-paper-textLight/70 dark:text-paper-textDark/70 leading-relaxed" data-i18n="card_audio_desc">اپیزودهای پادکست، توضیحات شفاهی و گفتگوها.</p>
+                    </div>
+
+                    <!-- Card 4: Quotes -->
+                    <div onclick="navigateTo('quotes')" class="group cursor-pointer p-5 rounded-xl bg-paper-cardLight dark:bg-paper-cardDark border border-paper-borderLight dark:border-paper-borderDark hover:border-paper-accentLight dark:hover:border-paper-accentDark transition-all duration-200 hover:-translate-y-0.5">
+                        <div class="w-9 h-9 rounded-lg bg-paper-light dark:bg-paper-dark border border-paper-borderLight dark:border-paper-borderDark flex items-center justify-center text-paper-accentLight dark:text-paper-accentDark mb-3 group-hover:scale-110 transition-transform">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+                        </div>
+                        <h3 class="font-bold text-base mb-1" data-i18n="card_quotes_title">نقل‌قول‌های برگزیده</h3>
+                        <p class="text-xs text-paper-textLight/70 dark:text-paper-textDark/70 leading-relaxed" data-i18n="card_quotes_desc">جملات کلیدی، گزین‌گویه‌ها و فرازهای درخشان.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Previews Section (Recent Notes & Audio) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
+                <!-- Recent Notes Preview -->
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between border-b border-paper-borderLight dark:border-paper-borderDark pb-2">
+                        <h3 class="font-bold text-base flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-paper-accentLight dark:bg-paper-accentDark"></span>
+                            <span data-i18n="latest_notes">آخرین یادداشت‌ها</span>
+                        </h3>
+                        <button onclick="navigateTo('notes')" class="text-xs text-paper-accentLight dark:text-paper-accentDark hover:underline" data-i18n="view_all">مشاهده همه</button>
+                    </div>
+                    <div id="homeRecentNotes" class="space-y-3">
+                        <!-- Dynamic content loaded via JS -->
+                    </div>
+                </div>
+
+                <!-- Recent Audio Episodes Preview -->
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between border-b border-paper-borderLight dark:border-paper-borderDark pb-2">
+                        <h3 class="font-bold text-base flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-paper-accentLight dark:bg-paper-accentDark"></span>
+                            <span data-i18n="latest_audio">آخرین فایل‌های صوتی</span>
+                        </h3>
+                        <button onclick="navigateTo('audio')" class="text-xs text-paper-accentLight dark:text-paper-accentDark hover:underline" data-i18n="view_all">مشاهده همه</button>
+                    </div>
+                    <div id="homeRecentAudio" class="space-y-3">
+                        <!-- Dynamic content loaded via JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- 2. READING NOTES LIST VIEW -->
+        <section id=
