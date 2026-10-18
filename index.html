@@ -12,6 +12,8 @@
 [data-theme="dark"]{--bg:#1d1a17;--card:#27231f;--ink:#f1e9df;--soft:#b3a393;--line:#a8927d;--accent:#c4ab92;--shadow:rgba(0,0,0,.5)}
 *{box-sizing:border-box;margin:0}
 html,body{min-height:100%}
+body{overflow-x:hidden}
+.entry,.panel{min-width:0}
 body{background:var(--bg);color:var(--ink);font-family:"Vazirmatn",Tahoma,sans-serif;line-height:1.9;transition:background .3s,color .3s}
 body[dir=ltr],[dir=ltr] body{font-family:"Vazirmatn",Georgia,serif}
 a{color:inherit;text-decoration:none}
@@ -55,6 +57,28 @@ h1{font-size:34px;text-align:center;font-weight:700;line-height:1.5}
 .prose p:last-child{margin-bottom:0;font-weight:500}
 .ql{list-style:none;padding:0;display:grid;gap:10px}
 .ql li{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:10px 14px;font-size:15.5px;line-height:1.9}
+
+/* ===== پخش‌کننده ===== */
+.pl{margin-top:14px;direction:ltr}
+.pl-bar{display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--soft);font-variant-numeric:tabular-nums}
+.pl-bar span{min-width:34px;text-align:center}
+.pl input[type=range]{flex:1;min-width:0;height:22px;margin:0;background:none;-webkit-appearance:none;appearance:none;cursor:pointer;--p:0%}
+.pl input[type=range]::-webkit-slider-runnable-track{height:4px;border-radius:2px;background:linear-gradient(to right,var(--accent) var(--p),var(--line) var(--p))}
+.pl input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--accent);margin-top:-5px;border:0}
+.pl input[type=range]::-moz-range-track{height:4px;border-radius:2px;background:var(--line)}
+.pl input[type=range]::-moz-range-progress{height:4px;border-radius:2px;background:var(--accent)}
+.pl input[type=range]::-moz-range-thumb{width:14px;height:14px;border:0;border-radius:50%;background:var(--accent)}
+.pl-ctl{display:grid;grid-template-columns:1fr auto auto auto 1fr;align-items:center;gap:8px;margin-top:10px}
+.pl-ctl .spd{justify-self:start}
+.pl button{border:0;background:none;color:var(--ink);cursor:pointer;display:grid;place-items:center;padding:0;transition:transform .15s,opacity .2s}
+.pl button:active{transform:scale(.92)}
+.pl svg{display:block}
+.pl .pp{width:54px;height:54px;border-radius:50%;background:var(--accent);color:var(--card)}
+.pl .pp svg{width:26px;height:26px;fill:currentColor}
+.pl .sk{width:42px;height:42px}
+.pl .sk svg{width:30px;height:30px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.pl .sk .fl{fill:currentColor;stroke:none}
+.pl .spd{height:30px;padding:0 9px;border-radius:15px;border:1px solid var(--line);font:inherit;font-size:13px;font-weight:700}
 [hidden]{display:none!important}
 
 /* ===== پویانمایی ===== */
@@ -162,14 +186,41 @@ const EPISODES=[
   {title:"چرا کلیسا جوردانو برونو را سوزاند؟",titleEn:"Why Did the Church Burn Giordano Bruno?",desc:"",descEn:"",src:"چرا_کلیسا_جوردانو_برونو_را_سوزاند.mp3"}
   // {title:"قسمت دوم",titleEn:"Episode two",desc:"...",descEn:"...",src:"https://archive.org/download/نام-آیتم/ep2.mp3"}
 ];
+const IC={
+ play:'<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>',
+ pause:'<svg viewBox="0 0 24 24"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>',
+ fwd:'<svg viewBox="0 0 24 24"><path d="M12 5a8 8 0 1 1-8 8"/><path class="fl" d="M12 1.5v7l4.2-3.5z"/><text x="12" y="16.2" text-anchor="middle" font-size="7.5" font-weight="700" stroke="none" fill="currentColor">10</text></svg>',
+ back:'<svg viewBox="0 0 24 24"><g transform="translate(24 0) scale(-1 1)"><path d="M12 5a8 8 0 1 1-8 8"/><path class="fl" d="M12 1.5v7l4.2-3.5z"/></g><text x="12" y="16.2" text-anchor="middle" font-size="7.5" font-weight="700" stroke="none" fill="currentColor">10</text></svg>'
+};
+const RATES=[1,1.25,1.5,2,0.75];
+const fmt=t=>{if(!isFinite(t))return"0:00";const m=Math.floor(t/60),s=Math.floor(t%60);return m+":"+String(s).padStart(2,"0")};
+function buildPlayer(src){
+  const a=new Audio();a.preload="metadata";a.src=src;
+  const w=document.createElement("div");w.className="pl";
+  w.innerHTML='<div class="pl-bar"><span class="cur">0:00</span><input type="range" min="0" max="1000" value="0" aria-label="Seek"><span class="dur">0:00</span></div><div class="pl-ctl"><button class="spd" title="Speed">1×</button><button class="sk" title="-10s" aria-label="Back 10 seconds">'+IC.back+'</button><button class="pp" aria-label="Play">'+IC.play+'</button><button class="sk" title="+10s" aria-label="Forward 10 seconds">'+IC.fwd+'</button><span class="sp"></span></div>';
+  const q=x=>w.querySelector(x),bar=q("input"),pp=q(".pp"),sk=w.querySelectorAll(".sk"),spd=q(".spd");let ri=0;
+  const paint=()=>{const p=a.duration?a.currentTime/a.duration*100:0;bar.value=p*10;bar.style.setProperty("--p",p+"%");q(".cur").textContent=fmt(a.currentTime)};
+  a.onloadedmetadata=()=>{q(".dur").textContent=fmt(a.duration)};
+  a.ontimeupdate=paint;
+  a.onplay=()=>{pp.innerHTML=IC.pause;pp.setAttribute("aria-label","Pause")};
+  a.onpause=()=>{pp.innerHTML=IC.play;pp.setAttribute("aria-label","Play")};
+  pp.onclick=()=>a.paused?a.play():a.pause();
+  sk[0].onclick=()=>{a.currentTime=Math.max(0,a.currentTime-10)};
+  sk[1].onclick=()=>{a.currentTime=Math.min(a.duration||0,a.currentTime+10)};
+  spd.onclick=()=>{ri=(ri+1)%RATES.length;a.playbackRate=RATES[ri];spd.textContent=RATES[ri]+"×"};
+  bar.oninput=()=>{if(a.duration){a.currentTime=bar.value/1000*a.duration;paint()}};
+  return w;
+}
 function renderEps(){
-  const eps=$("#eps");eps.innerHTML="";const en=root.lang==="en";
-  EPISODES.forEach(e=>{
+  const eps=$("#eps"),en=root.lang==="en";
+  if(!eps.children.length)EPISODES.forEach(e=>{
     const d=document.createElement("div");d.className="entry";
-    const h=document.createElement("h3");h.textContent=en?(e.titleEn||e.title):e.title;
-    const p=document.createElement("p");p.textContent=en?(e.descEn||e.desc):e.desc;if(!p.textContent)p.hidden=true;
-    const a=document.createElement("audio");a.controls=true;a.preload="none";a.src=e.src;
-    d.append(h,p,a);eps.append(d);
+    d.append(document.createElement("h3"),document.createElement("p"),buildPlayer(e.src));eps.append(d);
+  });
+  EPISODES.forEach((e,i)=>{
+    const d=eps.children[i],p=d.querySelector("p");
+    d.querySelector("h3").textContent=en?(e.titleEn||e.title):e.title;
+    p.textContent=en?(e.descEn||e.desc):e.desc;p.hidden=!p.textContent;
   });
 }
 let l="fa",t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";
