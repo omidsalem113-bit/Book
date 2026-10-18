@@ -159,7 +159,7 @@ document.querySelectorAll(".hd").forEach(b=>b.onclick=()=>{
 });
 /* ===== پادکست: فقط این لیست را ویرایش کن ===== */
 const EPISODES=[
-  {title:"قسمت اول",titleEn:"Episode one",desc:"توضیح کوتاه این قسمت",descEn:"A short description of this episode",src:"audio/ep1.mp3"}
+  {title:"چرا کلیسا جوردانو برونو را سوزاند؟",titleEn:"Why Did the Church Burn Giordano Bruno?",desc:"",descEn:"",src:"چرا_کلیسا_جوردانو_برونو_را_سوزاند.mp3"}
   // {title:"قسمت دوم",titleEn:"Episode two",desc:"...",descEn:"...",src:"https://archive.org/download/نام-آیتم/ep2.mp3"}
 ];
 function renderEps(){
@@ -167,7 +167,7 @@ function renderEps(){
   EPISODES.forEach(e=>{
     const d=document.createElement("div");d.className="entry";
     const h=document.createElement("h3");h.textContent=en?(e.titleEn||e.title):e.title;
-    const p=document.createElement("p");p.textContent=en?(e.descEn||e.desc):e.desc;
+    const p=document.createElement("p");p.textContent=en?(e.descEn||e.desc):e.desc;if(!p.textContent)p.hidden=true;
     const a=document.createElement("audio");a.controls=true;a.preload="none";a.src=e.src;
     d.append(h,p,a);eps.append(d);
   });
